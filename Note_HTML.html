@@ -1,0 +1,273 @@
+HTML5中新的网页结构
+header元素表示页面中的一个区域或者整个页面的标题<header></header>
+nav元素表示页面中的导航链接部分<nav></nav>
+article元素表示页面中的一块与上下文不相关的独立内容，比如一片文章中的文章<article></article>
+section表示页面中的一块内容区块，比如章节的页眉、页脚等等。也可以和hn(h1,h2...)等一起使用，标识出文档的结构<section></section>
+aside元素表示article元素的内容之外的，和内容相关的辅助信息<aside></aside>
+footer元素表示页面或者是页面中的一块区域的页脚，比如存放文件的创建时间、作者、联系方式等等<footer></footer>
+
+
+
+和其他不相关的独立内容用article
+一块内容的不同部分分块用section，section中要有标题
+内容的附属部分，比如广告，引用放在aside中
+
+
+
+nav元素的使用场合
+1.传统的导航条2.侧边栏导航3.内页导航4.翻页操作
+
+
+
+time元素
+<time datetime="2014-9-28">时间</time>
+<time datetime="2014-9-28">9月28</time>
+<time datetime="2014-9-28">今天时间</time>
+<time datetime="2014-9-28T22:30">9月28晚上10点半</time>
+<time datetime="2014-9-28T2:30Z">UTC标准时间10点半</time>
+<time datetime="2014-9-28T22:30+8:00">中国时间9月28晚上10点半</time>
+
+在元素里面包含了pubdate属性的话，就是表示当前文章的发布时间
+
+
+
+hgroup元素是将标题和他的子标题进行分组的元素。hgroup元素一般会把h1-h6的元素进行分组，比如在一个内容区块的标题和他的子标题算是一组
+通常情况下，文章只有一个主标题的时候，是不需要hgroup的
+<hgroup>
+    <h1>asda</h1>
+    <h2>asdas</h2>
+</hgroup>
+
+
+
+address元素用来在页面中呈现联系信息，包括文档的作者、邮箱、地址、电话信息等。
+address元素还用来展示和文章的相关的联系人的所有联系信息
+
+
+
+figure元素是一种元素的组合，带有可选标题。figure元素用来在表示页面上一块独立的内容，如果将他从网页上删除不给我们的网页造成影响
+figcaption元素表示figure元素的标题，它属于figure元素，figcaption元素必须书写在figure元素内部，可以写在figure元素内其他元素前面或后面。一个figure元素内最多只允许放置一个figcaption元素
+<figure>
+    <img src="1.jpg">
+    <img src="2.jpg">
+    <img src="3.jpg">
+    <figcaption>image</figcaption>
+</figure>
+
+
+
+details元素是一种标识该元素内部的子元素可以被展开、收缩显示的元素。
+details元素具有一个布尔类型的open属性，当该值为true时，该元素内部的子元素应该被展开显示。当该元素属性值为false时，其内部的子元素应被收缩起来不显示。
+该属性的默认值为false，当页面打开其内部的子元素应处于收缩状态。
+summary元素从属于detail元素，用鼠标点击summary元素的内容文字时，details元素中的其他所有从属元素将会展开或者收缩。如果details元素内没有summary元素，浏览器会提供默认的文字以供点击，例如“details”。
+目前只有Chrome支持
+
+
+
+mark元素表示页面中需要突出显示或高亮显示的，对于当前用户具有参考价值作用的一段文字。通常在引用原文时使用mark元素，目的是引起读者的注意
+mark元素是对原文内容有补充作用的一个元素，他应该用在一段原文作者不认为重要的，但是现在为了原文作者不相关的其他目的而需要突出显示或者高亮显示的文字上面。
+mark元素最主要的目的就是吸引当前用户的注意。 mark元素除了高亮显示之外，还有一个作用就是在引用原文时，为了某种特殊的目的而把作者没有表示出来的内容重点表示出来
+
+
+
+progress元素代表一个任务的完成进度，这个进度可以是不确定的，表示进度正在进行，但不清楚这个还有多少工作量没有完成，也可以用0到某个最大数字（比如100）之间的数字来表示准确的进度情况（比如百分比）
+该元素具有两个表示当前任务完成情况的属性，value属性表示已经完成了多少工作量，max属性表示总共又多少工作量。工作量的单位是随意的，不指定的属性只能指定为有效的浮点数，value属性必须大于0，
+且小于或等于max的属性，max的属性必须大于0
+
+
+
+在html5中废除的元素
+1.能使用CSS代替的元素basefont,big,center,font,s,strike,tt,u
+2.不再使用frame框架
+
+
+
+html5大纲
+关于HTML的大纲编排，我们可以划分为“显示编排”和“隐式编排”两种
+1.显示编排是指明确使用section元素进行分块来创建网页文档，每个内容区块内使用标题(h1-h6)
+2.隐式编排就是我们不适用section元素进行明确的区块划分，而是根据我们写的(h1-h6，hgroup)元素进行自动创建区块，因为html5分析器可以根据不同级别的标题判断出对应的内容区块
+3.标题分级：不同的标题有不同的级别，在（h1-h6）中，h1的级别最高，而h6的级别最低。所以在隐式编排的情况下就会按照一下规则生成
+    1）如果出现新的标题比上一个标题级别低，那么将会生成下级内容区块
+    2）如果新出现的标题比上面出现的一个标题级别高，或者两者级别相同，那么就生成新的内容区块
+4不同的内容区块可以使用相同级别的标题，父内容区块与子内容区块都可以使用相同级别的h1标题
+<body>
+    <header>
+        <h1>网页大纲编写实战</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html" >首页</a> </li>
+                <li><a href="index2.html">内容页</a> </li>
+                <li><a href="index3.html">联系我们</a></li>
+            </ul>
+        </nav>
+    </header>
+    <article>
+        <hgroup>
+            <h1>文章主标题</h1>
+            <h2>文章子标题</h2>
+        </hgroup>
+        <p>文章正文</p>
+        <section>
+            <h1>文章评论列表：</h1>
+            <article>
+                <h1>评论标题A</h1>
+                <P>评论内容A</P>
+            </article>
+            <article>
+                <h1>评论标题B</h1>
+                <p>评论标题B</p>
+            </article>
+        </section>
+    </article>
+    <footer>
+        <small>麦子学院版权所有</small>
+    </footer>
+</body>
+
+
+
+canvas是html5中新增的绘制图形的
+1.创建画布，指定id，宽度，高度<canvas id="canvas" width="100px" height="100px"></canvas>
+2.引入绘画脚本<script type="text/javascript" src="canvas.js" charset="utf-8"></script>
+3.使用draw函数进行绘画，再body的属性里面，使用onload="draw('canvas');"语句，调用脚本文件中的draw函数进行图形绘画画矩形
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+        window.onload = function () {
+            var canvas = document.getElementById("mm");
+            var context = canvas.getContext('2d');
+            context.fillStyle = "black";
+            context.strokeStyle = "orange";
+            context.lineWidth = 5;
+            context.fillRect(100, 50, 100, 150);
+            context.strokeRect(130, 70, 50, 60);
+        }
+    </script>
+</head>
+<body>
+    <canvas id="mm" width="300px" height="300px"></canvas>
+</body>
+</html>
+
+
+
+使用canvas创建圆形路径时，需要使用图形上下文对象的arc方法。
+context.arc(x,y,radius,startAngle,endAngle,anticlockwise)
+x是绘制圆形的起点横坐标，y是绘制圆形的起点纵坐标，radius是圆形的半径，startAngle是开始角度，endAngle是结束角度，anticlockwise是否按照顺时针方向绘制
+绘制半径与圆弧时，指定开始弧度与结束弧度，如果喜欢使用角度，可以使用以下方法，把角度转换为弧度
+var radius = degress*Math.PI/180
+这个里面Math.PI表示的是角度是180度，Math.PI*2的角度是180度
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+        window.onload = function () {
+            var canvas = document.getElementById("mm");
+            var context = canvas.getContext('2d');
+            for (var i = 1; i < 30; i++) {
+                context.beginPath();
+                context.arc(i*13, i*13, i*9, 0, Math.PI * 2, true);
+                context.fillStyle = 'rgba(255,0,0,0.1)';
+                context.closePath();
+                context.fill();
+                context.strokeStyle = 'red';
+                context.stroke();
+            }
+        }
+    </script>
+</head>
+<body>
+    <canvas id="mm" width="500px" height="500px"></canvas>
+</body>
+</html>
+
+
+
+context.fillText(text, x, y, [maxwidth]);
+context.strokeText(text, x, y, [maxwidth]); maxwidth是可选参数，最大宽度，防止文字溢出,内容会被压缩变瘦（不是裁剪）
+
+context.textBaseline = 'alphabetic'; 属性值可以是top(顶部对齐)，hanging（悬挂），middle（中间对齐），bottom（底部对齐），alohabetic默认值
+
+context.textAlign = 'start'; 属性值可以是start,end,left,right,center
+
+
+
+我们可以使用canvas api来保存图片
+使用toDataURL方法把绘画的状态输出到一个data URL中然后重新装载，然后我们可以把重新装载的文件直接保存
+canvas api保存文件的原理实际上就是把我们绘画的状态输出到一个data URL所指向的数据中的过程。
+data URL实际上就是base64编码的URL，主要是用于小型的，可以在网页中直接嵌入，而不需要从外部嵌入数据，比如img元素里面的图像文件
+data URL 的格式"data:image/jpeg;base64,/j4/4..."
+toDataURL的使用方法
+canvas.toDataURL(type) 这个方法使用一个参数type，表示输出数据的MIME类型（image/jpeg)
+
+
+
+擦除图像
+context.clearRect(x,y,width,height);
+
+
+
+video元素是专门用来播放网络上视频或电影
+<video width="750" height="400" src="time.mp4">Your browser doesn't support video</video>
+
+source元素指定多个播放格式与编码，以确保浏览器可以从中选择一种支持的格式，训责顺序自上而下
+<video>
+    <source src="video.m4v" type="video/mp4/" />
+    <source src="video.webm" type="video/webm" />
+</video>
+
+audio元素是用来播放网络上声音
+<audio src="aa.mp3" controls="controls">提示语句</audio>
+对于不支持的浏览器我们可以在这对元素中加入提示语句来代替
+
+autoplay属性指定是否当网页加载完成后自动播放
+
+preload属性指定是否对数据进行预加载，如果是的话，浏览器会将视频或音频数据进行缓冲
+preload: none表示不预加载，metadata表示加载媒体的元数据，auto表示加载全部（默认）
+
+poster（video独有）但视频还未/不能播放的时候显示该图片
+<video src="video.mp4" poster="video.jpg"></video>
+
+loop属性指定是否循环播放音频或视频
+
+error属性，在读取过程中一旦发生错误，将返回一个返回值，正常情况下为null
+sample:
+<script>
+    var video = document.getElementById('video');
+    video.addEventListener("error", function(){
+        var error = video.error;
+        switch(error.code){
+            case 1:
+
+            case 2:
+        }
+    })
+</script>
+
+
+
+networkState属性返回当前的网络状态
+
+
+
+对象元素的draggable属性设置为true，还需要注意的是a元素和img元素必须指定href
+编写与拖放有关的事件处理代码
+dragstart   开始拖放
+drag        拖放过程
+dragenter   被拖放的元素进入本元素
+dragover    被拖放的元素在本元素内移动
+dragleave   被拖放的元素离开本元素
+drop        其他元素被拖放到了本元素
+dragend     拖放操作结束
+
+dataTransfer对象的属性和方法
+dropEffect  表示拖放的视觉效果，允许设置其值，这个效果必须用在effectAllowed属性指定的允许的视觉效果的范围内，允许指定的值none, copy, link, move
+effectAllowed   用来指定当前元素被拖放时所允许的视觉效果，可以指定的值copy, link, move, copylink, all, none, unintialized
+types   存入的数据的种类，字符串的伪数组
+clearData
+setData
+getData
+setDragImage(Element img, long x, long y) 用img元素来设置拖放图标
+
+dropEffect属性与effectAllowed属性结合起来可以设定拖放时的视觉效果。effectAllowed属性表示一个元素被拖放时所允许的视觉效果，一般在ondragstart事件中设定
