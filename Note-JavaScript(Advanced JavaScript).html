@@ -557,6 +557,13 @@ ECMAScript中的函数是对象，因此函数也有属性和方法。每个函�
 	sayColor.call(o); //blue 
 </script>
 使用call()（或apply()）来扩充作用域的最大好处，就是对象不需要与方法有任何耦合关系
+区分apply,call就一句话,
+foo.call(this, arg1,arg2,arg3) == foo.apply(this, arguments)==this.foo(arg1, arg2, arg3)
+call, apply都属于Function.prototype的一个方法,它是JavaScript引擎内在实现的,因为属于Function.prototype,所以每个Function对象实例,也就是每个方法都有call, apply属性.既然作为方法的属性,
+那它们的使用就当然是针对方法的了.这两个方法是容易混淆的,因为它们的作用一样,只是使用方式不同.
+
+相同点:两个方法产生的作用是完全一样的
+不同点:方法传递的参数不同
 
 
 
@@ -683,7 +690,7 @@ alert("hi");
 因此被执行的代码具有与该执行环境相同的作用域链。这意味着通过eval()执行的代码可以引用在包含环境中定义的变量，举个例子：
 <script>
 	var msg = "hello world"; 
-	eval("alert(msg)"); //"hello world" 
+	eval("alert(msg)"); //"hello world"
 </script>
 
 可见，变量msg是在eval()调用的环境之外定义的，但其中调用的alert()仍然能够显示"hello world"。这是因为上面第二行代码最终被替换成了一行真正的代码。
@@ -699,3 +706,381 @@ alert("hi");
 "use strict"; 
 eval = "hi"; //causes error 
 能够解释代码字符串的能力非常强大，但也非常危险。因此在使用eval()时必须极为谨慎，特别是在用它执行用户输入数据的情况下。否则，可能会有恶意用户输入威胁你的站点或应用程序安全的代码（即所谓的代码注入）。
+
+
+
+下面来介绍将小数值舍入为整数的几个方法：Math.ceil()、Math.floor()和Math.round()。这三个方法分别遵循下列舍入规则：
+Math.ceil()执行向上舍入，即它总是将数值向上舍入为最接近的整数；
+Math.floor()执行向下舍入，即它总是将数值向下舍入为最接近的整数；
+Math.round()执行标准舍入，即它总是将数值四舍五入为最接近的整数（这也是我们在数学课上学到的舍入规则）。
+
+
+
+<script>
+	var person = { 
+		name: "Nicholas",  
+		age: 29, 
+		job: "Software Engineer", 
+		sayName: function(){ 
+			alert(this.name); 
+		} 
+	}; 
+</script>
+数据属性包含一个数据值的位置。在这个位置可以读取和写入值。数据属性有4个描述其行为的特性。
+[[Configurable]]：表示能否通过delete删除属性从而重新定义属性，能否修改属性的特性，或者能否把属性修改为访问器属性。像前面例子中那样直接在对象上定义的属性，它们的这个特性默认值为true。
+[[Enumerable]]：表示能否通过for-in循环返回属性。像前面例子中那样直接在对象上定义的属性，它们的这个特性默认值为true。
+[[Writable]]：表示能否修改属性的值。像前面例子中那样直接在对象上定义的属性，它们的这个特性默认值为true。
+[[Value]]：包含这个属性的数据值。读取属性值的时候，从这个位置读；写入属性值的时候，把新值保存在这个位置。这个特性的默认值为undefined。
+要修改属性默认的特性，必须使用ECMAScript 5的Object.defineProperty()方法。这个方法接收三个参数：属性所在的对象、属性的名字和一个描述符对象。
+其中，描述符（descriptor）对象的属性必须是：configurable、enumerable、writable和value。设置其中的一或多个值，可以修改对应的特性值。
+<script>
+	var person = {}; 
+	Object.defineProperty(person, "name", { 
+		writable: false, 
+		value: "Nicholas"  
+	}); 
+	alert(person.name);   //"Nicholas" 
+	person.name = "Greg"; 
+	alert(person.name);   //"Nicholas" 
+</script>
+在调用Object.defineProperty()方法时，如果不指定，configurable、enumerable和writable特性的默认值都是false。
+
+
+
+访问器属性有如下4个特性。
+[[Configurable]]：表示能否通过delete删除属性从而重新定义属性，能否修改属性的特性，或者能否把属性修改为数据属性。对于直接在对象上定义的属性，这个特性的默认值为true。
+[[Enumerable]]：表示能否通过for-in循环返回属性。对于直接在对象上定义的属性，这个特性的默认值为true。
+[[Get]]：在读取属性时调用的函数。默认值为undefined。
+[[Set]]：在写入属性时调用的函数。默认值为undefined。
+访问器属性不能直接定义，必须使用Object.defineProperty()来定义。请看下面的例子。
+<script>
+	var book = { 
+		_year: 2004,  
+		edition: 1 
+	}; 
+	Object.defineProperty(book, "year", { 
+		get: function(){ 
+			return this._year; 
+		}, 
+		set: function(newValue){ 
+			if (newValue > 2004) { 
+				this._year = newValue; 
+				this.edition += newValue - 2004; 
+			} 
+		} 
+	}); 
+	book.year = 2005; 
+	alert(book.edition);  //2 
+	alert(book.year);  	  //2005 
+</script>
+以上代码创建了一个book对象，并给它定义两个默认的属性：_year和edition。_year前面的下划线是一种常用的记号，用于表示只能通过对象方法访问的属性。
+不一定非要同时指定getter和setter。只指定getter意味着属性是不能写，尝试写入属性会被忽略。
+
+
+
+由于为对象定义多个属性的可能性很大，ECMAScript  5又定义了一个Object.defineProperties()方法。利用这个方法可以通过描述符一次定义多个属性。
+这个方法接收两个对象参数：第一个对象是要添加和修改其属性的对象，第二个对象的属性与第一个对象中要添加或修改的属性一一对应。
+<script>
+	var book = {}; 
+	Object.defineProperties(book, { 
+		_year: { 
+			value: 2004 
+		}, 
+		edition: { 
+			value: 1 
+		}, 
+		year: { 
+			get: function(){ 
+				return this._year; 
+			}, 
+			set: function(newValue){ 
+				if (newValue > 2004) { 
+					this._year = newValue; 
+					this.edition += newValue - 2004; 
+				} 
+			} 
+		} 
+	}); 
+</script>
+
+
+
+
+使用ECMAScript  5的Object.getOwnPropertyDescriptor()方法，可以取得给定属性的描述符。这个方法接收两个参数：属性所在的对象和要读取其描述符的属性名称。返回值是一个对象，如果是访问器属性，这个对象的属性有
+configurable、enumerable、get和set；如果是数据属性，这个对象的属性有configurable、enumerable、writable和value。
+例如：
+<script>
+	var book = {}; 
+	Object.defineProperties(book, { 
+		_year: {  
+			value: 2004 
+		}, 
+		edition: { 
+			value: 1 
+		}, 
+		year: { 
+			get: function(){ 
+				return this._year; 
+			}, 
+			set: function(newValue){ 
+				if (newValue > 2004) { 
+					this._year = newValue; 
+					this.edition += newValue - 2004; 
+				} 
+			} 
+		} 
+	}); 
+	var descriptor = Object.getOwnPropertyDescriptor(book, "_year"); 
+	alert(descriptor.value);	//2004 
+	alert(descriptor.configurable); //false 
+	alert(typeof descriptor.get);	//"undefined" 
+	var descriptor = Object.getOwnPropertyDescriptor(book, "year"); 
+	alert(descriptor.value);	//undefined 
+	alert(descriptor.enumerable);	//false 
+	alert(typeof descriptor.get);	//"function" 
+</script>
+
+
+
+使用构造函数创建对象
+<script>
+	function Person(name, age, job){ 	//按照惯例，构造函数始终都应该以一个大写字母开头，而非构造函数则应该以一个小写字母开头
+		this.name = name; 
+		this.age = age; 
+		this.job = job; 
+		this.sayName = function(){ 
+			alert(this.name); 
+		};     
+	} 
+	var person1 = new Person("Nicholas", 29, "Software Engineer"); 
+	var person2 = new Person("Greg", 27, "Doctor"); 
+</script>
+要创建Person的新实例，必须使用new操作符。以这种方式调用构造函数实际上会经历以下4个步骤：
+(1) 创建一个新对象；
+(2) 将构造函数的作用域赋给新对象（因此this就指向了这个新对象）；
+(3) 执行构造函数中的代码（为这个新对象添加属性）；
+(4) 返回新对象。在前面例子的最后，person1和person2分别保存着Person的一个不同的实例。这两个对象都有一个constructor（构造函数）属性，该属性指向Person，如下所示。
+	alert(person1.constructor == Person);  //true 
+	alert(person2.constructor == Person);  //true 
+
+<script>
+	// 当作构造函数使用
+	var person = new Person("Nicholas", 29, "Software Engineer"); 
+	person.sayName(); //"Nicholas" 
+	
+	// 作为普通函数调用
+	Person("Greg", 27, "Doctor"); // 添加到window 
+	window.sayName(); //"Greg" 
+	
+	// 在另一个对象的作用域中调用
+	var o = new Object(); 
+	Person.call(o, "Kristen", 25, "Nurse"); 	// 也可以使用apply
+	o.sayName(); //"Kristen" 
+</script>
+
+
+构造函数模式虽然好用，但也并非没有缺点。使用构造函数的主要问题，就是每个方法都要在每个实例上重新创建一遍。在前面的例子中，person1和person2都有一个名为sayName()的方法，但那两个方法不是同一个Function
+的实例。不要忘了——ECMAScript中的函数是对象，因此每定义一个函数，也就是实例化了一个对象。从逻辑角度讲，此时的构造函数也可以这样定义。
+<script>
+	function Person(name, age, job){ 
+		this.name = name; 
+		this.age = age; 
+		this.job = job; 
+		this.sayName = new Function("alert(this.name)"); // 与声明函数在逻辑上是等价的
+	} 
+</script>
+然而，创建两个完成同样任务的Function实例的确没有必要；况且有this对象在，根本不用在执行代码前就把函数绑定到特定对象上面。因此，大可像下面这样，通过把函数定义转移到构造函数外部来解决这个问题。
+(缺点是需要在全局函数中创建很多的方法，而且只为这个对象所服务)
+<script>
+	function Person(name, age, job){ 
+		this.name = name; 
+		this.age = age; 
+		this.job = job; 
+		this.sayName = sayName; 
+	} 
+	function sayName(){ 
+		alert(this.name); 
+	} 
+	var person1 = new Person("Nicholas", 29, "Software Engineer"); 
+	var person2 = new Person("Greg", 27, "Doctor"); 
+</script>
+
+
+
+原型模式
+我们创建的每个函数都有一个prototype（原型）属性，这个属性是一个指针，指向一个对象，而这个对象的用途是包含可以由特定类型的所有实例共享的属性和方法。如果按照字面意思来理解，那么prototype
+就是通过调用构造函数而创建的那个对象实例的原型对象。使用原型对象的好处是可以让所有对象实例共享它所包含的属性和方法。换句话说，不必在构造函数中定义对象实例的信息，而是可以将这些信息直接添加到原型对象中，
+如下面的例子所示。
+<script>
+	function Person(){ 
+	} 
+	Person.prototype.name = "Nicholas"; 
+	Person.prototype.age = 29; 
+	Person.prototype.job = "Software Engineer"; 
+	Person.prototype.sayName = function(){ 
+		alert(this.name); 
+	}; 
+	var person1 = new Person(); 
+	person1.sayName();   //"Nicholas" 
+	var person2 = new Person(); 
+	person2.sayName();   //"Nicholas" 
+	alert(person1.sayName == person2.sayName);  //true 
+</script>
+在此，我们将sayName()方法和所有属性直接添加到了Person的prototype属性中，构造函数变成了空函数。即使如此，也仍然可以通过调用构造函数来创建新对象，而且新对象还会具有相同的属性和方法。
+但与构造函数模式不同的是，新对象的这些属性和方法是由所有实例共享的。换句话说，person1和person2访问的都是同一组属性和同一个sayName()函数。要理解原型模式的工作原理，必须先理解ECMAScript中原型对象的性质。
+
+1. 理解原型对象无论什么时候，只要创建了一个新函数，就会根据一组特定的规则为该函数创建一个prototype属性，这个属性指向函数的原型对象。在默认情况下，所有原型对象都会自动获得一个constructor（构造函数）属性，
+这个属性包含一个指向prototype属性所在函数的指针。就拿前面的例子来说，Person.prototype.constructor指向Person。而通过这个构造函数，我们还可继续为原型对象添加其他属性和方法。创建了自定义的构造函数之后，
+其原型对象默认只会取得constructor属性；至于其他方法，则都是从Object继承而来的。当调用构造函数创建一个新实例后，该实例的内部将包含一个指针（内部属性），指向构造函数的原型对象。ECMA-262第5版中管这个指针叫
+[[Prototype]]。虽然在脚本中没有标准的方式访问[[Prototype]]，但Firefox、Safari和Chrome在每个对象上都支持一个属性__proto__；而在其他实现中，这个属性对脚本则是完全不可见的。不过，要明确的真正重要的一点就
+是，这个连接存在于实例与构造函数的原型对象之间，而不是存在于实例与构造函数之间。
+在此，Person.prototype指向了原型对象，而Person.prototype.constructor又指回了Person。原型对象中除了包含constructor属性之外，还包括后来添加的其他属性。Person的每个实例——person1和
+person2都包含一个内部属性，该属性仅仅指向了Person.prototype；换句话说，它们与构造函数没有直接的关系。此外，要格外注意的是，虽然这两个实例都不包含属性和方法，但我们却可以调用person1.sayName()
+。这是通过查找对象属性的过程来实现的。虽然在所有实现中都无法访问到[[Prototype]]，但可以通过isPrototypeOf()方法来确定对象之间是否存在这种关系。从本质上讲，如果[[Prototype]]指向调用isPrototypeOf()
+方法的对象（Person.prototype），那么这个方法就返回true
+，如下所示：
+<script>
+	alert(Person.prototype.isPrototypeOf(person1));  //true 
+	alert(Person.prototype.isPrototypeOf(person2));  //true 
+</script>
+ECMAScript  5增加了一个新方法，叫Object.getPrototypeOf()，在所有支持的实现中，这个方法返回[[Prototype]]的值。例如：
+<script>
+	alert(Object.getPrototypeOf(person1) == Person.prototype); //true 
+	alert(Object.getPrototypeOf(person1).name); //"Nicholas" 
+</script>
+这里的第一行代码只是确定Object.getPrototypeOf()返回的对象实际就是这个对象的原型。第二行代码取得了原型对象中name属性的值，也就是"Nicholas"。使用Object.getPrototypeOf()
+可以方便地取得一个对象的原型，而这在利用原型实现继承（本章稍后会讨论）的情况下是非常重要的。支持这个方法的浏览器有IE9+、Firefox 3.5+、Safari 5+、Opera 12+和Chrome。
+
+
+每当代码读取某个对象的某个属性时，都会执行一次搜索，目标是具有给定名字的属性。搜索首先从对象实例本身开始。如果在实例中找到了具有给定名字的属性，则返回该属性的值；如果没有找到，则继续搜索指针指向的原型对象，
+在原型对象中查找具有给定名字的属性。如果在原型对象中找到了这个属性，则返回该属性的值。也就是说，在我们调用person1.sayName()的时候，会先后执行两次搜索。首先，解析器会问：“实例person1有sayName属性吗？”答：“没有。”
+然后，它继续搜索，再问：“person1的原型有sayName属性吗？”答：“有。 ”于是，它就读取那个保存在原型对象中的函数。当我们调用person2.sayName()时，将会重现相同的搜索过程，得到相同的结果。而这正是多个
+对象实例共享原型所保存的属性和方法的基本原理。
+
+虽然可以通过对象实例访问保存在原型中的值，但却不能通过对象实例重写原型中的值。如果我们在实例中添加了一个属性，而该属性与实例原型中的一个属性同名，那我们就在实例中创建该属性，该属性将会屏蔽原型中的那个属性。
+来看下面的例子。
+<script>
+	function Person(){ 
+	} 
+	Person.prototype.name = "Nicholas"; 
+	Person.prototype.age = 29; 
+	Person.prototype.job = "Software Engineer"; 
+	Person.prototype.sayName = function(){ 
+		alert(this.name); 
+	}; 
+	var person1 = new Person(); 
+	var person2 = new Person(); 
+	person1.name = "Greg"; 
+	alert(person1.name);     //"Greg"	——	来自实例
+	alert(person2.name);     //"Nicholas"	——	来自原型
+</script>
+当为对象实例添加一个属性时，这个属性就会屏蔽原型对象中保存的同名属性；换句话说，添加这个属性只会阻止我们访问原型中的那个属性，但不会修改那个属性。即使将这个属性设置为null，也
+只会在实例中设置这个属性，而不会恢复其指向原型的连接。不过，使用delete操作符则可以完全删除实例属性，从而让我们能够重新访问原型中的属性，如下所示。
+<script>
+	function Person(){ 
+	} 
+	Person.prototype.name = "Nicholas"; 
+	Person.prototype.age = 29; 
+	Person.prototype.job = "Software Engineer"; 
+	Person.prototype.sayName = function(){ 
+		alert(this.name); 
+	}; 
+	var person1 = new Person(); 
+	var person2 = new Person(); 
+	person1.name = "Greg"; 
+	alert(person1.name);     //"Greg"——来自实例
+	alert(person2.name);     //"Nicholas"——来自原型
+	delete person1.name; 
+	alert(person1.name);     //"Nicholas"——来自原型
+</script>
+
+
+
+使用hasOwnProperty()方法可以检测一个属性是存在于实例中，还是存在于原型中。这个方法（不要忘了它是从Object继承来的）只在给定属性存在于对象实例中时，才会返回true。
+<script>
+	function Person(){ 
+	} 
+	Person.prototype.name = "Nicholas"; 
+	Person.prototype.age = 29; 
+	Person.prototype.job = "Software Engineer"; 
+	Person.prototype.sayName = function(){ 
+		alert(this.name); 
+	};
+	var person1 = new Person(); 
+	var person2 = new Person(); 
+	alert(person1.hasOwnProperty("name"));  //false 
+	person1.name = "Greg"; 
+	alert(person1.name);     //"Greg"——来自实例
+	alert(person1.hasOwnProperty("name"));  //true 
+	alert(person2.name);     //"Nicholas"——来自原型
+	alert(person2.hasOwnProperty("name"));  //false 
+	delete person1.name; 
+	alert(person1.name);     //"Nicholas"——来自原型
+	alert(person1.hasOwnProperty("name"));  //false 
+</script>
+
+
+
+有两种方式使用in操作符：单独使用和在for-in循环中使用。在单独使用时，in操作符会在通过对象能够访问给定属性时返回true，无论该属性存在于实例中还是原型中。看一看下面的例子。
+<script>
+	function Person(){ 
+	} 
+	Person.prototype.name = "Nicholas"; 
+	Person.prototype.age = 29; 
+	Person.prototype.job = "Software Engineer"; 
+	Person.prototype.sayName = function(){ 
+		alert(this.name); 
+	}; 
+	var person1 = new Person(); 
+	var person2 = new Person(); 
+	alert(person1.hasOwnProperty("name"));  //false 
+	alert("name" in person1);  //true 
+	person1.name = "Greg"; 
+	alert(person1.name);   //"Greg" 	——	来自实例
+	alert(person1.hasOwnProperty("name"));  //true 
+	alert("name" in person1);  //true 
+	alert(person2.name);   //"Nicholas" 	——	来自原型
+	alert(person2.hasOwnProperty("name"));  //false 
+	alert("name" in person2);  //true 
+	delete person1.name; 
+	alert(person1.name);   //"Nicholas" 	——	来自原型
+	alert(person1.hasOwnProperty("name"));  //false 
+	alert("name" in person1);  //true 
+</script>
+
+
+
+在以上代码执行的整个过程中，name属性要么是直接在对象上访问到的，要么是通过原型访问到的。因此，调用"name" in person1始终都返回true，无论该属性存在于实例中还是存在于原型中。同时使用hasOwnProperty()
+方法和in操作符，就可以确定该属性到底是存在于对象中，还是存在于原型中，如下所示。
+<script>
+	function hasPrototypeProperty(object, name){ 
+		return !object.hasOwnProperty(name) && (name in object); 
+	} 
+</script>
+由于in操作符只要通过对象能够访问到属性就返回true，hasOwnProperty()只在属性存在于实例中时才返回true，因此只要in操作符返回true而hasOwnProperty()返回false，就可以确定属性是原型中的属性。
+
+
+
+在使用for-in循环时，返回的是所有能够通过对象访问的、可枚举的（enumerated）属性，其中既包括存在于实例中的属性，也包括存在于原型中的属性。屏蔽了原型中不可枚举属性（即将[[Enumerable]]
+标记为false的属性）的实例属性也会在for-in循环中返回，因为根据规定，所有开发人员定义的属性都是可枚举的
+
+
+
+要取得对象上所有可枚举的实例属性，可以使用ECMAScript 5的Object.keys()方法。这个方法接收一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。例如：
+<script>
+	function Person(){ 
+	} 
+	Person.prototype.name = "Nicholas"; 
+	Person.prototype.age = 29; 
+	Person.prototype.job = "Software Engineer"; 
+	Person.prototype.sayName = function(){ 
+		alert(this.name);  
+	}; 
+	var keys = Object.keys(Person.prototype); 
+	alert(keys);	//"name,age,job,sayName" 
+	var p1 = new Person(); 
+	p1.name = "Rob"; 
+	p1.age = 31; 
+	var p1keys = Object.keys(p1); 
+	alert(p1keys);	//"name,age" 	
+</script>
