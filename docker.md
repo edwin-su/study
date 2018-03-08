@@ -18,13 +18,26 @@
 * ENTRYPOINT : 每次conatiner启动的时候都会执行的命令，只有最后一条生效
 
 # Docker常用命令：
-## 1. docker build -t registry_url/namespace/csphere/centos:7.1 .
+> docker build -t registry_url/namespace/csphere/centos:7.1 .
 * docker build
     * 使一个dockerfile生成一个docker镜像
 * -t
     * 给镜像起个名字
+    
     * 命名规则    registry_url/namespace/name:version_number(如果没有写verison_number，则默认为lastest)
         * 例:
             registry_url/namespace/csphere/centos:7.1
      .
     * 如果dockerfile在当前目录下，则用.代替，如果不在，则注明其相对路径
+
+## 2. docker images
+查看当前docker中的镜像
+> docker images
+
+## 3. docker rm
+删除一个或多少容器
+> docker rm [OPTIONS] CONTAINER [CONTAINER...]
+##### OPTIONS说明：
+* -f :通过SIGKILL信号强制删除一个运行中的容器
+* -l :移除容器间的网络连接，而非容器本身
+* -v :-v 删除与容器关联的卷
