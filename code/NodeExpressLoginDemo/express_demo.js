@@ -18,7 +18,7 @@ app.get('/', function (req, res) {
 app.post('/login', urlencodedParser, function (req, res) {
     var userName = req.body.userName;
     var password = req.body.password;
-    if (!!userName && userName == 'edwin' && !!password && password == 'abc123_') {
+    if (!!userName && userName == 'abc' && !!password && password == 'abc123_') {
         res.send("Login success");
     } else {
         res.send("login falil");
