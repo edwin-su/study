@@ -1,34 +1,39 @@
 # 三种使用js的方式
 ### 1. 内部javascript片段
-> &lt;script type="text/javascript"><br />
->     alert("helo world");<br />
-> &lt;/script>
+>
+    <script type="text/javascript">
+        <alert("helo world");
+    </script>
 
 ### 2. 引入外部js文件
-> &lt;script type="text/javascript" src="js/aa.js">&lt;/script>
+> 
+    <script type="text/javascript" src="js/aa.js"></script>
 
 ### 3. 在元素的事件或者a标签的href上使用js
-> &lt;a href="javascript:alert('hello');">click me&lt;/a><br />
-> &lt;p onclick="javascript:alert('hello world')">click me&lt;/p>
+> 
+    <a href="javascript:alert('hello');">click me</a>
+    <p onclick="javascript:alert('hello world')">click me</p>
 
 <br />
 
 # 如果一行代码太长，想分两行书写，可以在末尾添加\
->   document.writeln("qwewqe\\ <br />
->   wqewqewqe");
+>   
+    document.writeln("qwewqe\\
+    wqewqewqe");
 
 <br />
 
 # 强制转换为整数parseInt(字符,几进制)，规则同样适用于parseFloat
 
-> console.log(parseInt("12"));        //12    <br />
-> console.log(parseInt("1 2"));        //1   <br />
-> console.log(parseInt("10",2));        //2  <br />
-> console.log(parseInt("2k"));        //2    <br />
-> console.log(parseInt(" 12k"));        //12 <br />
-> console.log(parseInt("k2"));        //NaN  <br />
-> console.log(parseInt(true));        //NaN  <br />
-> console.log(parseInt("true"));        //NaN<br />
+> 
+    console.log(parseInt("12"));            //12
+    console.log(parseInt("1 2"));           //1
+    console.log(parseInt("10",2));          //2
+    console.log(parseInt("2k"));            //2
+    console.log(parseInt(" 12k"));          //12
+    console.log(parseInt("k2"));            //NaN
+    console.log(parseInt(true));            //NaN
+    console.log(parseInt("true"));          //NaN
 
 
 Number函数将字符串转换为数值比parseInt函数要严格得多，只要字符中有一个不是数字，就会返回NaN
