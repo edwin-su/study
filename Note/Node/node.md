@@ -86,6 +86,9 @@
 创建模块，package.json 文件是必不可少的。我们可以使用 NPM 生成 package.json 文件，生成的文件包含了基本的结果。
 > npm init
 
+使用默认值创建
+> npm init -y
+
 在 Node.js 中，创建一个模块非常简单，如下我们创建一个 main.js 文件，代码如下:
 >var hello = require('./hello');\
 hello.world();

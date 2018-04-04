@@ -282,9 +282,9 @@
     new Vue({
     // ...
     components: {
-    // <my-component> 将只在父组件模板中可用
-    'my-component': Child
-    } \
+        // <my-component> 将只在父组件模板中可用
+        'my-component': Child
+    }
 })
 
 components中的data是必须的
@@ -422,7 +422,7 @@ computed 和 watch 都可以观察页面的数据变化。当处理页面的数�
           }
       })
 
-  在vue的 模板内（{{}}）是可以写一些简单的js表达式的 ，很便利。但是如果在页面中使用大量或是复杂的表达式去处理数据，对页面的维护会有很大的影响。这个时候就需要用到computed 计算属性来处理复杂的逻辑运算。\
+  在vue的 模板内（{{}}）是可以写一些简单的js表达式的 ，很便利。但是如果在页面中使用大量或是复杂的表达式去处理数据，对页面的维护会有很大的影响。这个时候就需要用到computed 计算属性来处理复杂的逻辑运算
   1. 优点： \
   在数据未发生变化时，优先读取缓存。computed 计算属性只有在相关的数据发生变化时才会改变要计算的属性，当相关数据没有变化是，它会读取缓存。而不必想 motheds方法 和 watch 方法是的每次都去执行函数。
   2. setter 和 getter方法：（注意在vue中书写时用set 和 get） \
@@ -516,7 +516,7 @@ computed 和 watch 都可以观察页面的数据变化。当处理页面的数�
         }   
     　},    
     　render (h) { return h(this.ViewComponent) }   
-})
+    })
 
 <br>
 
@@ -651,14 +651,61 @@ Vue 提供一个官方命令行工具，可用于快速搭建大型单页应用�
     $ cd my-project
     $ npm run dev
 
+<br>
 
+# vue组件中的样式属性--scoped
+vue组件中的style标签标有scoped属性时表明style里的css样式只适用于当前组件元素 
+它是通过使用PostCSS来改变以下内容实现的:
+>
+    <style scoped>
+        .example {
+            color: red;
+        }
+    </style>
 
+    <template>
+        <div class="example">hi</div>
+    </template>
 
+>
+    <style>
+        .example[data-v-f3f3eg9] {
+            color: red;
+        }
+    </style>
 
+    <template>
+        <div class="example" data-v-f3f3eg9>hi</div>
+    </template>
 
+## 关于子组件的根元素
+使用了scoped属性之后，父组件的style样式将不会渗透到子组件中，然而子组件的根节点元素会同时被设置了scoped的父css样式和设置了scoped的子css样式影响，这么设计的目的是父组件可以对子组件根元素进行布局。 
+.vue模板中的样式是根据需要按需加载，访问一个页面该组件中的样式就会追加到head标签中，如果父子组件中都对某个子组件根节点元素进行了控制，则父组件里的样式会被后来的覆盖。
 
+## 深选择器
+如果想对设置了scoped的子组件里的元素进行控制可以使用’>>>’或者’deep’
+>
+    <template>
+        <div id="app">
+            <gHeader></gHeader>
+        </div>
+    </template>
 
+    <style lang="css" scoped>
+        .gHeader /deep/ .name{ //第一种写法
+            color:red;
+        }
+        .gHeader >>> .name{   //二种写法
+            color:red;
+        }
+    </style>
 
+>
+    <div class="gHeader">
+        <div class="name"></div>
+    </div>
 
+一些预处理程序例如sass不能解析>>>属性，这种情况下可以用deep，它是>>>的别名，工作原理相同。
 
-
+## 动态生成的内容
+使用v-html动态创建的DOM内容，不受设置scoped的样式影响，但你依然可以使用深选择器进行控制
