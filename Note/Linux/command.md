@@ -1,14 +1,75 @@
-# tar -xf all.tar
-这条命令是解出all.tar包中所有文件，-t是解开的意思
+# 删除非空目录
+> rm -rf 目录名
 
-# tar zxvf  aa.gz
-分别是四个参数
-x : 从 tar 包中把文件提取出来
-z : 表示 tar 包是被 gzip 压缩过的，所以解压时需要用 gunzip 解压
-v : 显示详细信息
-f xxx.tar.gz :  指定被处理的文件是 xxx.tar.gz
+<br>
 
-# 删除非空目录rm -rf 目录名
+# 临时设置环境变量 
+export PATH=$PATH:/Node/node-v4.4.7-linux-x64/lib/node_modules/pm2/bin
+
+<br>
+
+# 查看端口占用
+> lsof -i:9999
+> netstat -tunlp|grep 9999
+查看端口号为9999的占用情况
+
+<br>
+
+# 杀死进程
+> kill -s 9 2418
+杀死进程id为2418的进程
+
+<br>
+
+# 查看文件最后15行
+> tail -n 15 文件名
+
+<br>
+
+# 查看文件内容less,cat,more
+1. cat命令功能用于显示整个文件的内容单独使用没有翻页功能因此经常和more命令搭配使用，cat命令还有就是将数个文件合并成一个文件的功能。
+2. more命令功能：让画面在显示满一页时暂停，此时可按空格健继续显示下一个画面，或按Q键停止显示。
+3. less命令功能：less命令的用法与more命令类似，也可以用来浏览超过一页的文件。所不同的是less命令除了可以按空格键向下显示文件外，还可以利用上下键来卷动文件。当要结束浏览时，只要在less命令的提示符“：”下按Q键即可
+
+<br>
+
+# 安装nodejs
+1. 解压nodejs
+2. 配置全局用的NODE_HOME，修改profile文件
+	> vi /etc/profile
+3. 设置nodejs环境变量，在最后
+	>
+		#set for nodejs
+		export NODE_HOME=/usr/local/nodejs
+		export PATH=$NODE_HOME/bin:$PATH
+4. :wq保存并退出，编译/etc/profile 使配置生效
+	> source /etc/profile
+5. 验证是否安装配置成功
+	> node -v
+
+<br>
+
+# 安装配置mongodb
+1. 解压mongodb
+2. 配置全局用的MONGO_HOME，修改profile文件
+	> vi /etc/profile
+3. 设置mongo环境变量，在最后
+	>
+		#set for nodejs
+		export MONGO_HOME=/usr/local/mongodb
+		export PATH=$MONGO_HOME/bin:$PATH
+4. :wq保存并退出，编译/etc/profile 使配置生效
+	> source /etc/profile
+5. 使用mongo命令重启服务 报错…,说是需要安装openssl-1.1.0e.tar.gz该软件
+
+### 参考:
+* http://www.osyunwei.com/archives/7629.html
+* https://blog.csdn.net/wwww_com/article/details/68484613
+
+<br>
+
+# 安装openssl
+
 
 # Linux系统下升级Python版本步骤（suse系统）
 1. 切换到下载文件的目录中（此目录可以自定义）
@@ -28,11 +89,17 @@ f xxx.tar.gz :  指定被处理的文件是 xxx.tar.gz
 8. 创建软链接指向
     > ln -s /usr/local/python3/bin/python3  /usr/bin/python
 
-# node 
-分别指定node和npm路径
+<br>
 
-# mongodb
+# ssh或putty远程访问配置方法
+1. 需要关闭防火墙\
+在YAST（在图形界面下，依次选择Computer→Control Center→YaST→Firewall）里可以关闭，也可以使用下面命令行的方式，但出于安全的考虑，在实际使用是还是要根据实际情况打开防火墙，应该配置防火墙允许正确的，合法的通讯通过。
+选为：
+	* Disable Firewall  Automatic Starting
+	* Stop Firewall Now
+2. 选择"Allowed Services"，在"Service to Allow"中选择"Secure Shell Server"（在Suse11中是"Secure Shell Server"，在Suse10中是“SSH”）, 然后"Add"，然后next，finish。
 
+<br>
 
 # vim编辑器
 * :wq
@@ -62,19 +129,54 @@ f xxx.tar.gz :  指定被处理的文件是 xxx.tar.gz
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 安装openssl
 https://blog.csdn.net/hanzheng260561728/article/details/53811270
 
 # 安装配置mongodb
 http://www.osyunwei.com/archives/7629.html
 
-# 临时设置环境变量 
-export PATH=$PATH:/Node/node-v4.4.7-linux-x64/lib/node_modules/pm2/bin
 
-# 查看端口占用
-> lsof -i:9999
-查看端口号为9999的占用情况
 
-# 杀死进程
-> kill -s 9 2418
-杀死进程id为2418的进程
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
