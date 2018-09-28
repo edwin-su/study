@@ -1,3 +1,5 @@
+
+
 # Docker 组件(c/s)
 * Docker Client : Docker的客户端
 * Docker Server : Docker daemon的主要组成部分，接收用户通过Docker Client发送的请求，并按照相应的路由规则实现路由分发。
@@ -41,3 +43,18 @@
 * -f :通过SIGKILL信号强制删除一个运行中的容器
 * -l :移除容器间的网络连接，而非容器本身
 * -v :-v 删除与容器关联的卷
+
+## 4. docker rmi
+删除一个或多个镜像
+
+## 5. docker tag
+给image加repository和tag
+> docker tag 973ed9042bef repositoryname:tagname
+
+## 6.docker inspect -f '{{.NetworkSettings.IPAddress}}' [container name]
+查看某个container的 内部ip
+> docker inspect -f '{{.NetworkSettings.IPAddress}}' nginx
+
+## 7.docker run -p 宿主端口:docker端口 -t [repository]:[tag]
+将docker的某个端口映射到宿主机的某个端口
+> docker run -p 7799:11600 -t edwin:edwin
