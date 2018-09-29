@@ -32,11 +32,11 @@
      .
     * 如果dockerfile在当前目录下，则用.代替，如果不在，则注明其相对路径
 
-## 2. docker images
+## 2. 查看镜像 docker images
 查看当前docker中的镜像
 > docker images
 
-## 3. docker rm
+## 3. 删除容器 docker rm
 删除一个或多少容器
 > docker rm [OPTIONS] CONTAINER [CONTAINER...]
 ##### OPTIONS说明：
@@ -44,17 +44,29 @@
 * -l :移除容器间的网络连接，而非容器本身
 * -v :-v 删除与容器关联的卷
 
-## 4. docker rmi
+## 4. 删除镜像 docker rmi
 删除一个或多个镜像
 
-## 5. docker tag
+## 5. 给镜像打标签 docker tag
 给image加repository和tag
 > docker tag 973ed9042bef repositoryname:tagname
 
-## 6.docker inspect -f '{{.NetworkSettings.IPAddress}}' [container name]
+## 6. 查看容器ip地址 docker inspect -f '{{.NetworkSettings.IPAddress}}' [container name]
 查看某个container的 内部ip
 > docker inspect -f '{{.NetworkSettings.IPAddress}}' nginx
 
-## 7.docker run -p 宿主端口:docker端口 -t [repository]:[tag]
+## 7. 启动容器 docker run -p 宿主端口:docker端口 -t [repository]:[tag]
 将docker的某个端口映射到宿主机的某个端口
 > docker run -p 7799:11600 -t edwin:edwin
+
+## 8. 映射主机和容器的文件路径 docker run -v 宿主机目录:docker目录
+将宿主机的某个文件夹映射到docker container中的某个目录
+> docker run -v E:/prod/:/opt/sc-cm/webapps/certs/
+
+## 9. 导出镜像 docker save -o 宿主机路径 repositoryname:tagname
+将某个镜像导出
+> docker save -o /home/user/images/ubuntu_14.04.tar ubuntu:14.04
+
+## 10. 载入镜像 docker load --input 宿主机镜像绝对路径
+导入某个镜像
+> docker load --input ubuntu_14.04.tar
